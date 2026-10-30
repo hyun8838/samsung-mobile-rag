@@ -1,0 +1,16 @@
+data/
+.env*
+.venv*/
+venv/
+logs/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.ipynb_checkpoints/
+.DS_Store
+AGENTS.md
+CLAUDE.md
+.claude/

@@ -1,0 +1,29 @@
+[server]
+address = "127.0.0.1"
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"   # 로컬 전용 앱: Deploy 버튼 숨김
+
+# 삼성 브랜드 색 컨셉(로고·이미지 없음, 색·글꼴만). 삼성 공식 서비스가 아닌 개인 프로젝트의 시각 컨셉.
+[theme]
+base = "light"
+# 삼성 블루: #1428A0은 삼성 로고 파랑(Pantone 2748 C 근사)으로 널리 인용되는 값. 공식 브랜드 가이드에서 직접 확인한 값은 아님.
+primaryColor = "#1428A0"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#EEF2FB"   # 옅은 파랑(채팅 말풍선·위젯 배경)
+linkColor = "#1428A0"
+textColor = "#1B1D21"
+# 한국어 글꼴: Noto Sans KR(Google Fonts CSS, Streamlit 1.50 'font = "<이름>:<CSS URL>"' 형식). 접속 시 브라우저가 fonts.googleapis.com을 호출하며, 실패하면 sans-serif로 대체.
+font = "Noto Sans KR:https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap, sans-serif"
+baseRadius = "0.9rem"
+buttonRadius = "full"
+
+[theme.sidebar]
+# 사이드바 = 삼성 블루 배경 + 흰 글자(화면 약 30%). 위젯(선택 상자)은 흰 배경·진한 글자로 app/main.py의 최소 CSS가 보정한다.
+backgroundColor = "#1428A0"
+secondaryBackgroundColor = "#0E1E7A"
+textColor = "#FFFFFF"
+primaryColor = "#FFFFFF"
