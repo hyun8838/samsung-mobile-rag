@@ -1,0 +1,4 @@
+# VS Code 노트북의 기본 셀 실행
+pandas==2.3.3
+ipykernel
+# 선택 FT 학습은 기본 requirements.txt에 더해 datasets, accelerate 필요

@@ -1,0 +1,12 @@
+# galaxyrag 실행에 실제 import하는 패키지.
+numpy==1.26.4
+torch==2.8.0
+sentence-transformers==5.1.2
+transformers==4.57.6
+rank-bm25==0.2.2
+kiwipiepy==0.23.2
+PyMuPDF==1.26.5
+openpyxl==3.1.5
+openai==2.48.0
+scikit-learn==1.6.1
+python-dotenv==1.2.1

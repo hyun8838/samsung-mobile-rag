@@ -1,0 +1,27 @@
+# Streamlit 앱 추가 의존성(python 3.9). 설치 시 packaging이 25.0으로 내려감(streamlit 요구).
+streamlit==1.50.0
+altair==5.5.0
+attrs==26.1.0
+blinker==1.9.0
+cachetools==6.2.6
+click==8.1.8
+gitdb==4.0.12
+GitPython==3.2.1
+jsonschema==4.25.1
+jsonschema-specifications==2025.9.1
+narwhals==2.21.0
+packaging==25.0
+pandas==2.3.3
+protobuf==6.33.6
+pyarrow==21.0.0
+pydeck==0.9.3
+python-dateutil==2.9.0.post0
+pytz==2026.5
+referencing==0.36.2
+rpds-py==0.27.1
+six==1.17.0
+smmap==5.0.3
+tenacity==9.1.2
+toml==0.10.2
+tornado==6.5.10
+tzdata==2026.5
