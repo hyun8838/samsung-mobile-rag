@@ -1,13 +1,15 @@
 """벡터/스파스 인덱스 + 메타데이터 필터 + 하이브리드 융합.
 
 벡터 백엔드 선택 근거 (재현성 기록 항목):
-    numpy flat exact cosine을 쓴다. FAISS/Chroma의 ANN이 아니라 **완전탐색**이다.
+    평가(검색 방식 비교)는 numpy flat exact cosine(완전탐색)을 쓴다. 앱·MCP 서버는 Chroma(기본)·FAISS(선택)를
+    쓰며 rag/vector_backends.py에 있다(환경변수 GALAXY_VECTOR_BACKEND = chroma | faiss | numpy). 아래는 평가 쪽 numpy를 고른 근거다.
+    FAISS/Chroma의 ANN이 아니라 **완전탐색**이다.
     이유 ①현재 코퍼스가 수천~수만 청크 규모라 완전탐색이 밀리초 단위로 끝난다
         ②ANN 근사 오차가 Recall@k에 섞이면 "검색 방식(H1~H5)의 차이"와 "인덱스 근사 손실"이
           분리되지 않는다 — 평가가 목적인 프로젝트에서는 근사 오차를 0으로 두는 편이 낫다
         ③메타데이터 사전 필터링(H4)을 정확히 적용할 수 있다. ANN은 필터와 결합하면
           후보 부족/재탐색 문제가 생겨 결과가 필터 강도에 따라 흔들린다.
-    인터페이스(`VectorIndex.search`)는 유지하므로 규모가 커지면 FAISS 백엔드로 교체 가능하다.
+    인터페이스(`VectorIndex.search`)를 같은 모양으로 구현한 Chroma·FAISS 백엔드가 vector_backends 모듈에 있다(평가 코드는 이 numpy 경로 그대로).
 """
 from __future__ import annotations
 

@@ -18,7 +18,7 @@
 ```mermaid
 flowchart LR
   A[기기 선택<br/>제품 종류 → 시리즈] --> B[질문 입력]
-  B --> C[그 기기 설명서 안에서<br/>arctic-ko dense top10]
+  B --> C[LangChain·Chroma 기기 필터<br/>arctic-ko dense top10]
   C --> D[FT 리랭커로<br/>top5 선택]
   D --> E[생성 모델이 근거로만 답 작성<br/>질문 유형 판단]
   E -->|근거 충분| F[설명서 답<br/>근거 번호·쪽 번호]
@@ -41,12 +41,13 @@ flowchart LR
 ## 모델 및 기술 스택
 
 * **LLM**: gpt-6-luna(답 생성), gpt-5.4-mini(LLM judge)
-* **임베딩**: dragonkue/snowflake-arctic-embed-l-v2.0-ko(arctic-ko), 3개 비교 후 선정(아래 검색 구성 비교)
-* **리랭커**: BAAI/bge-reranker-v2-m3를 질문–청크 판정 데이터로 FT
-* **검색**: dense 검색은 numpy 벡터 유사도, BM25는 rank-bm25 + kiwipiepy 형태소 분석
-* **웹 검색**: OpenAI Responses API web_search, samsungsvc.co.kr·samsung.com만 허용
-* **챗봇 UI**: Streamlit / **외부 연결**: MCP 서버
-* **파이썬 라이브러리**: sentence-transformers, transformers, torch, numpy, rank-bm25, kiwipiepy, PyMuPDF, openai, streamlit, mcp
+* **임베딩**: dragonkue/snowflake-arctic-embed-l-v2.0-ko(arctic-ko)
+* **리랭커**: BAAI/bge-reranker-v2-m3 (FT)
+* **검색**: LangChain, Chroma, rank-bm25 + kiwipiepy
+* **평가**: RAGAS(검색), LLM judge(답변)
+* **웹 검색**: OpenAI Responses API web_search
+* **UI / 외부 연결**: Streamlit / MCP 서버
+* **파이썬 라이브러리**: langchain, chromadb, ragas, sentence-transformers, transformers, torch, rank-bm25, kiwipiepy, PyMuPDF, openai, streamlit, mcp
 
 ---
 
@@ -56,7 +57,7 @@ flowchart LR
   * 한국어 임베딩 리더보드 검색 점수 상위 모델과 기본 모델(bge-m3)을 후보로 선택
 * 검색 방식: BM25, dense, hybrid(RRF, 같은 가중치·튜닝 안 함), 기성 리랭커, FT 리랭커
   * FT 리랭커는 평가 질문의 질문–청크 판정 데이터로 임베딩마다 그 임베딩의 검색 후보에서 학습, 수치는 그 질문을 학습에서 뺀 OOF 모델로 측정
-* 13개 후보를 질문 150개로 비교, 주 지표 **strict R@5**(질문별 정답 청크 중 top5에 든 비율의 평균)
+* 13개 후보를 질문 150개로 비교, 주 지표 **R@5**(질문별 정답 청크 중 top5에 든 비율의 평균)
   * 답 생성에 top5만 넣고 질문마다 정답 청크가 여러 개여서 정답을 모두 찾는지 보는 지표로 선택
   * 정답 청크: 후보 top10 3,043쌍을 LLM 2개가 따로 판정(Cohen κ 0.94), 갈린 27쌍은 사람이 판정
 
@@ -93,6 +94,7 @@ flowchart LR
 
 * 품목별 다른 모델 설명서 비율(필터 off): 탭 92.2%, 폰 89.4%, 북 89.3%, 워치 82.8%, 버즈 61.6%
 * 다른 모델 청크 647개 중 고른 기기 설명서에도 같은 문장이 있는 비율은 **23.2%**. 내용은 맞고 기기 귀속만 다른 경우
+* LangChain FAISS 기본 설정(후보 20개 검색 후 필터): 154문항 중 128문항이 결과 5개 미만, R@5 **0.514** → 검색 안에서 필터: **0.863** ([Patel et al., 2024](https://arxiv.org/abs/2403.04871); [Weaviate, 2024](https://weaviate.io/blog/speed-up-filtered-vector-search); [LangChain #28413](https://github.com/langchain-ai/langchain/issues/28413))
 
 ---
 
@@ -184,6 +186,7 @@ flowchart LR
 cd code    # 로컬 data/와 .env(OPENAI_API_KEY)를 이 폴더에 둠
 python3 -m venv .venv
 .venv/bin/python3 -m pip install -r requirements.txt -r requirements-app.txt
+.venv/bin/python3 scripts/build_chroma_index.py    # 처음 한 번, Chroma 색인 생성
 .venv/bin/python3 -m streamlit run app/main.py --server.address 127.0.0.1
 ```
 
@@ -197,6 +200,7 @@ code/
 ├── app/                       챗봇 화면, main.py로 실행
 ├── mcp_server/                서버 server.py, 데모 demo.py
 ├── rag/                       자료 처리·검색·답변·평가 공용 코드
+├── scripts/                   Chroma 색인 생성, RAGAS R@5 계산, 기기 필터 방식 비교
 ├── tests/                     앱·답변·스트리밍 시험
 └── requirements*.txt
 figs/                          시연 화면

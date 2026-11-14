@@ -2,6 +2,7 @@
 
 다른 AI 앱(호스트)이 이 서버의 도구로 갤럭시 설명서를 검색하고, 답변은 호스트가 만든다.
 검색 경로 = 챗봇과 같다(app/chatbot_service.retrieve_top5): arctic-ko dense top10(선택 기기 필터) -> FT 리랭커 -> top5.
+  벡터 저장소는 앱과 같다: 환경변수 GALAXY_VECTOR_BACKEND = chroma(기본) | faiss | numpy.
   - 근거 형식 = rag.create_answer.format_contexts와 같은 문자열(문서·쪽 / 섹션, 6000자 절단). 번호는 대화 안에서 이어 매기고 같은 청크는 같은 번호.
   - 서버 지침(MCP instructions) = 질문 유형별 규칙이 없는 지침(추가 정보·다른 모델 설명 제외 포함, SUFFICIENT/EVIDENCE 줄 출력)에
     도구 사용 문구 3가지([도구] 절, "search_manual이 돌려준 [매뉴얼 근거]", 근거 부족 시 search_official_web 호출)를 더한 것.

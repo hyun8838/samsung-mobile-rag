@@ -25,3 +25,8 @@ tenacity==9.1.2
 toml==0.10.2
 tornado==6.5.10
 tzdata==2026.5
+# 검색 단계 LangChain (GALAXY_RETRIEVAL_STACK=langchain 기본, native 선택). python3.9 기준
+langchain-core==0.3.86
+langchain-chroma==0.2.6
+langchain-community==0.3.31
+langchain==0.3.30

@@ -10,3 +10,6 @@ openpyxl==3.1.5
 openai==2.48.0
 scikit-learn==1.6.1
 python-dotenv==1.2.1
+# 앱·MCP 서버의 벡터 저장소(Chroma 기본, FAISS 선택). 평가 코드는 numpy 정확 검색을 그대로 쓴다.
+chromadb==1.5.9
+faiss-cpu==1.13.0
